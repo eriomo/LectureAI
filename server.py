@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-app = Flask(__name__, static_folder='.')
+app = Flask(__name__, static_folder='.', static_url_path='')
 CORS(app)
 
 API_KEY = os.getenv("GROQ_API_KEY", "")
@@ -25,7 +25,8 @@ def ask_groq(prompt, max_tokens=4000):
 # ── Serve the frontend HTML ───────────────────────────────────────────────────
 @app.route('/')
 def index():
-    return send_from_directory('.', 'lectureai_gemini.html')
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    return send_from_directory(base_dir, 'lectureai_gemini.html')
 
 # ── LAYER 1 & 3: Generate full lesson plan ────────────────────────────────────
 @app.route("/generate", methods=["POST"])
